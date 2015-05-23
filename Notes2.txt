@@ -1,0 +1,38 @@
+ low<-tolower(names(data))
+
+
+to grab the first name;
+
+firstElement<-function(x) { x[1] }
+sapply(splitNames,firstElement)
+
+
+splitNames <-strsplit(names(cameraData), "\\.")  separates the text via the "." 
+
+
+
+use gsub  (global sub )to remove multiple characters of the same type
+sub:  remove single character...same function
+
+
+testName<-"This_is_a_test"
+gsub("_", ",testName)
+
+produces "Thisisatest"
+***********************************************
+grep() and grepl()
+
+grep provides the index in the array of the item requested
+
+subset data tables
+
+cameraData2 <-cameraData[!grepl("Alameda",cameraData$intersection)
+
+thought...possible use this command to separate the colnames for the filter function to separate out the "avg" and "sd" parts of the data table for the course project
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+ data<-read.csv("./tidy.txt", sep=",")
+tlab <-names(data)
+test2<-grepl  ("*.(mean|std|arCoeff|correlation|mad|iqr|energy).*", tlab)
+data1<-data[!test2]

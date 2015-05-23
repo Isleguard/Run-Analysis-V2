@@ -1,0 +1,100 @@
+Datasets to load
+
+" UCI HAR Dataset/test/X_test.txt " 
+" UCI HAR Dataset/test/Y_test.txt "
+
+" UCI HAR Dataset/train/X_train.txt "
+" UCI HAR Dataset/train/Y_train.txt "
+
+*********************temp area**************************
+
+##Working Code:
+## read the data into data frames
+
+ytrain<-read.table("./UCI HAR Dataset/train/Y_train.txt",sep=" ")  <== vector of 7352 entries 7352x1  ==> test labels
+ytest<-read.table("./UCI HAR Dataset/test/Y_test.txt",sep=" ")     <== vecor of 2947 entries  2947x1  ==> test labels
+
+xtest<-read.table("./UCI HAR Dataset/test/X_test.txt",nrows=2947)
+xtrain<-read.table("./UCI HAR Dataset/train/X_train.txt",nrows=7352)
+
+##read and generate labels
+
+labls<-read.table("./UCI HAR Dataset/features.txt",nrows=561)
+atable<-read.table("./UCI HAR Dataset/activity_labels.txt",nrows=6,sep=" ")
+
+lv<-data.frame( t(labls))
+lv1<-as.vector(unname(unlist(lv[2,])))
+colnames(xtest)<-lv1
+colnames(xtrain)<-lv1
+
+
+## generate the row lables   file:  codetest.R
+for (i in 1:2947) {
+    for (j in 1:6)  {
+        if(ytest[i,1]==atable[j,1]) {
+            ytest[i,1]<-as.character(atable[j,2])
+        }
+    }
+}
+
+## Merge the new labels with the data table as the row names
+colnames(ytest)<-"Activity"
+test<-cbind2(ytest,xtest)        # now have 562(!) columns
+
+## do the same for the train data   file: codetest_train.R
+for (i in 1:7352) {
+    for (j in 1:6)  {
+        if(ytrain[i,1]==atable[j,1]) {
+            ytrain[i,1]<-as.character(atable[j,2])
+        }
+    }
+}
+
+colnames(ytrain) <-"Activity"
+train<-cbind2(ytrain,xtrain)
+
+# Now have two types of data: train and test
+# should combine the two along the rows
+
+ data<-rbind2(test,train)
+
+#we should also write it out to a file for "protection" to save steps from having to rebuild
+write.table(data, file="./tidy.csv",sep=",",col.names=TRUE)
+
+## start the analysis part of the data :  file: compute.R
+
+for (i in 2:562) {
+    tmp<-mean(as.numeric(data[,i]))
+    tmp1<-sd(as.numeric(data[,i]))
+    tmp2<-var(as.numeric(data[,i]))
+#
+    vector<-c(vector,  as.character(tmp))
+    sdvec<- c(sdvec, as.character(tmp1))
+    varvec<-c(varvec,as.character(tmp2))
+}
+
+
+#
+#Save the data and then use that data for the final data adjustment
+#   get rid of the "calculated" data and preserve the original data set
+#
+
+data<-read.csv("./tidy.txt", sep=",")
+tlab <-names(data)
+test2<-grepl  ("*.(mean|std|arCoeff|correlation|mad|iqr|energy).*", tlab)
+data1<-data[!test2]
+
+#
+# adjust the names: lower case
+#
+tlab2<-tolower(tlab1)
+colnames(data)<-tlab2 
+
+
+
+
+
+
+
+
+

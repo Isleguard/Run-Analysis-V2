@@ -1,0 +1,387 @@
+
+library(dplyr)
+packageVersion("dplyr")
+
+Functions within dplyr
+select()
+fiter()
+arrange()
+mutate()
+summarize()
+
+select(dataframe/matrix)_name, col_title,col_title_value=xxxx)
+
+filter(data.frame, col_title,...same as above)
+
+arrange(data.frame, col_name, desc(col_name))  
+	where desc is short for "decending"
+
+ 
+mutate(data.frame, new_col_name=(value, col_name function....i.e  size/1000 or size+1000, or a/b)
+
+summarize(data.frame, col_name = mean(bytes) ->example)
+
+*****************************************************************
+2nd part of swirl
+
+cran <- tbl_df(mydf)
+group_by(table, column)   then                   i.e. by_package<-group_by(cran,package)
+	summarize(table, function(col)   i.e.  summarize(by_package, mean(size))
+
+
+Compute four values, in the following order, from
+# the grouped data:
+#
+# 1. count = n()
+# 2. unique = n_distinct(ip_id)
+# 3. countries = n_distinct(country)
+# 4. avg_bytes = mean(size)
+#
+# A few thing to be careful of:
+#
+# 1. Separate arguments by commas
+# 2. Make sure you have a closing parenthesis
+# 3. Check your spelling!
+# 4. Store the result in pack_sum (for 'package summary')
+#
+# You should also take a look at ?n and ?n_distinct, so
+# that you really understand what is going on.
+
+pack_sum <- summarize(by_package,
+                      count = n(),
+                      unique = n_distinct(ip_id),
+                      countries = n_distinct(country),
+                      avg_bytes = mean(size))
+
+Compute four values, in the following order, from
+# the grouped data:
+#
+# 1. count = n()
+# 2. unique = n_distinct(ip_id)
+# 3. countries = n_distinct(country)
+# 4. avg_bytes = mean(size)
+#
+# A few thing to be careful of:
+#
+# 1. Separate arguments by commas
+# 2. Make sure you have a closing parenthesis
+# 3. Check your spelling!
+# 4. Store the result in pack_sum (for 'package summary')
+#
+# You should also take a look at ?n and ?n_distinct, so
+# that you really understand what is going on.
+
+pack_sum <- summarize(by_package,
+                      count = n(),
+                      unique = n_distinct(ip_id),
+                      countries = n_distinct(country),
+                      avg_bytes = mean(size))
+Compute four values, in the following order, from
+# the grouped data:
+#
+# 1. count = n()
+# 2. unique = n_distinct(ip_id)
+# 3. countries = n_distinct(country)
+# 4. avg_bytes = mean(size)
+#
+# A few thing to be careful of:
+#
+# 1. Separate arguments by commas
+# 2. Make sure you have a closing parenthesis
+# 3. Check your spelling!
+# 4. Store the result in pack_sum (for 'package summary')
+#
+# You should also take a look at ?n and ?n_distinct, so
+# that you really understand what is going on.
+
+pack_sum <- summarize(by_package,
+                      count = n(),
+                      unique = n_distinct(ip_id),
+                      countries = n_distinct(country),
+                      avg_bytes = mean(size))
+
+ pack_sum
+Source: local data frame [6,023 x 5]
+
+            package count unique countries  avg_bytes
+1                     A3    25     24        10          62194.96
+2  ABCExtremes    18     17         9           22904.33
+3         ABCoptim    16     15         9          17807.25
+4              ABCp2    18     17        10         30473.33
+5           ACCLMA    15     14         9          33375.53
+6                  ACD    17     16        10         99055.29
+7                ACNE    16     15        10         96099.75
+8             ACTCD    15     14         9          134746.27
+9         ADGofTest    47     44        20        12262.91
+10               ADM3    17     16        10        1077203.47
+
+
+We need to know the value of 'count' that splits the data into the top 1% and bottom 99% of packages based on total
+| downloads. In statistics, this is called the 0.99, or 99%, sample quantile. Use quantile(pack_sum$count, probs =
+| 0.99) to determine this number.
+
+> quantile(pack_sum$count,probs=0.99)
+   99% 
+679.56 
+
+quantile(pack_sum$unique, probs = 0.99)
+99% 
+465 
+
+***************data chaining / piping *************** pgm provided by swirl
+# Don't change any of the code below. Just type submit()
+# when you think you understand it.
+
+# We've already done this part, but we're repeating it
+# here for clarity.
+
+by_package <- group_by(cran, package)
+pack_sum <- summarize(by_package,
+                      count = n(),
+                      unique = n_distinct(ip_id),
+                      countries = n_distinct(country),
+                      avg_bytes = mean(size))
+
+# Here's the new bit, but using the same approach we've
+# been using this whole time.
+
+top_countries <- filter(pack_sum, countries > 60)
+result1 <- arrange(top_countries, desc(countries), avg_bytes)
+ 
+********************************************
+above is what we currently do below is the new "chaining" or piping using the %>%  keys as the pipe symbol equivilent
+********************************************
+# Read the code below, but don't change anything. As
+# you read it, you can pronounce the %>% operator as
+# the word 'then'.
+#
+# Type submit() when you think you understand
+# everything here.
+
+result3 <-
+  cran %>%
+  group_by(package) %>%
+  summarize(count = n(),
+            unique = n_distinct(ip_id),
+            countries = n_distinct(country),
+            avg_bytes = mean(size)
+  ) %>%
+  filter(countries > 60) %>%
+  arrange(desc(countries), avg_bytes)
+
+# Print result to console
+print(result3)
+
+***************************************************************
+
+ http://vita.had.co.nz/papers/tidy-data.pdf
+
+ 
+gather(source, key, value)
+spread(source,key, value)
+extract_numeric("class5")
+[1] 5
+
+    name    test  class grade
+1  Sally midterm class1     A
+2  Sally   final class1     C
+3  Brian midterm class1     B
+4  Brian   final class1     B
+5   Jeff midterm class2     D
+6   Jeff   final class2     E
+7  Roger midterm class2     C
+8  Roger   final class2     A
+9  Sally midterm class3     B
+10 Sally   final class3     C
+11 Karen midterm class3     C
+12 Karen   final class3     C
+13  Jeff midterm class4     A
+14  Jeff   final class4     C
+15 Karen midterm class4     A
+16 Karen   final class4     A
+17 Roger midterm class5     B
+18 Roger   final class5     A
+19 Brian midterm class5     A
+20 Brian   final class5     C
+
+
+students3 %>%
+  gather(class, grade, class1:class5, na.rm = TRUE) %>%
+  spread(test, grade) %>%
+  print
+
+   name  class final midterm
+1  Brian class1     B       B
+2  Brian class5     C       A
+3   Jeff class2     E       D
+4   Jeff class4     C       A
+5  Karen class3     C       C
+6  Karen class4     A       A
+7  Roger class2     A       C 
+8  Roger class5     A       B
+9  Sally class1     C       A
+10 Sally class3     C       B
+
+# We want the values in the class columns to be
+# 1, 2, ..., 5 and not class1, class2, ..., class5.
+#
+# Use the mutate() function from dplyr along with
+# extract_numeric(). Hint: You can "overwrite" a column
+# with mutate() by assigning a new value to the existing
+# column instead of creating a new column.
+#
+# Check out ?mutate and/or ?extract_numeric if you need
+# a refresher.
+#
+students3 %>%
+  gather(class, grade, class1:class5, na.rm = TRUE) %>%
+  spread(test, grade) %>%
+  ### Call to mutate() goes here %>%
+  print
+
+# Check out ?mutate and/or ?extract_numeric if you need
+# a refresher.
+#
+students3 %>%
+  gather(class, grade, class1:class5, na.rm = TRUE) %>%
+  spread(test, grade) %>%
+  mutate(.,class=extract_numeric(class))  %>%
+  print
+| Sourcing your script...
+
+    name class final midterm
+1  Brian     1     B       B
+2  Brian     5     C       A
+3   Jeff     2     E       D
+4   Jeff     4     C       A
+5  Karen     3     C       C
+6  Karen     4     A       A
+7  Roger     2     A       C
+8  Roger     5     A       B
+9  Sally     1     C       A
+10 Sally     3     C       B
+
+
+student_info <- students4 %>%
+  select(id, name, sex) %>%
+  unique(incomparables=FALSE) %>%
+  print
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+students2 %>%
+  gather( . , sex_class,count, -grade ) %>%
+  separate(. , sex_class, c("sex", "class")) %>%
+  print
+
+students3 %>%
+  gather(class, grade, class1:class5, na.rm = TRUE) %>%
+  spread( test, grade) %>%
+  print
+students3 %>%
+  gather(class, grade, class1:class5, na.rm = TRUE) %>%
+  spread(test, grade) %>%
+  mutate(.,class=extract_numeric(class))  %>%
+  print
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+# Accomplish the following three goals:
+#
+# 1. select() all columns that do NOT contain the word "total",
+# since if we have the male and female data, we can always
+# recreate the total count in a separate column, if we want it.
+# Hint: Use the contains() function, which you'll
+# find detailed in 'Selection' section of ?select.
+#
+# 2. gather() all columns EXCEPT score_range, using
+# key = part_sex and value = count.
+#
+# 3. separate() part_sex into two separate variables (columns),
+# called "part" and "sex", respectively. You may need to check
+# the 'Examples' section of ?separate to remember how the 'into'
+# argument should be phrased.
+#
+sat %>%
+  select(-contains( c("read_total", "write_total"))) %>%
+  gather(part_sex, count, -score_range) %>%
+  separate(part_sex,c("part","sex"))> %>%
+  print
+**********************************************************
+sat %>%
+  select(-contains( "total")) %>%
+  gather(part_sex, count, -score_range) %>%
+  separate(part_sex,c("part","sex")) %>%
+  print
+**********************************************************
+sat %>%
+  select(-contains("total")) %>%
+  gather(part_sex, count, -score_range) %>%
+  separate(part_sex, c("part", "sex")) %>%
+  group_by(part,sex) %>%
+  mutate(total=sum(count),prop=count/total ) %>%
+  print
+
+
+| Sourcing your script...
+
+Source: local data frame [36 x 6]
+Groups: part, sex
+
+   score_range part  sex  count  total       prop
+1      700-800 read male  40151 776092 0.05173485
+2      600-690 read male 121950 776092 0.15713343
+3      500-590 read male 227141 776092 0.29267278
+4      400-490 read male 242554 776092 0.31253253
+5      300-390 read male 113568 776092 0.14633317
+6      200-290 read male  30728 776092 0.03959324
+7      700-800 read  fem  38898 883955 0.04400450
+8      600-690 read  fem 126084 883955 0.14263622
+9      500-590 read  fem 259553 883955 0.29362694
+10     400-490 read  fem 296793 883955 0.33575578
+..         ...  ...  ...    ...    ...        ...
+##################################################
+lubridate
+
+ stores data internally in POSIXct format
+
+functions:
+now
+update
+mdy,ydm,ymd,hms,smh,mhs - m=month,d=day,y=year, h=hr, m=min, s=sec
+etc
+change timezones= with_tz(date, tzone="UTC")
+    e.g.   arrive<-with_tz(arrive,tzone="Asia/Hong_Kong"
+
+Create a new_interval() that spans from last_time to arrive. Store it in a new variable called how_long.
+
+> how_long<-new_interval(last_time, arrive)   <- creates time differential
+
+************************************
+new functions:
+instants
+intervals,
+durations,
+periods
+
+
+
+*****************************************************************
+references:
+http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+These topics are beyond the scope of this lesson, but you
+| can find a complete discussion in the 2011 Journal of Statistical Software paper titled 'Dates and Times
+| Made Easy with lubridate'.
+
+##########################################################
+week 3 summarizing data:
+check crostabs -->  xtabs()
+
+create flat tables:
+use xtabs and then take data into the ftable(<output of xtabs>)
+summarized the data in more compact tables
+
+
+size of the dataset -->   object.size (<dataset>)
+print(object.size(fakeData), units="Mb")
+
+

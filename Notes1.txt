@@ -1,0 +1,52 @@
+ steps to perform
+1. remove "..."   --> sub ("...", "", names)  should remove the three dots
+
+2. tolower (names)   ---> make all case letters lower case
+
+3. remove strings that contain "avg" or "sd"
+
+4. the data from #3 is used within the dplyr functin "filter" to remove those columns
+
+5. count the number of columns,
+
+6.update the word document.
+7.update the command string document.
+8. go to git-hub and remove unnecessary files
+9. put the new data out to the git-hub account.
+
+10.submit the work for grading
+
+*************************************************************************
+2nd attempt
+
+1. use grepl to determine the column names that contain "mean,std,correlation,
+mad(?),max,min, ....iqr(?), sma, energy, entropy
+
+mean(): Mean value
+std(): Standard deviation
+mad(): Median absolute deviation 
+max(): Largest value in array
+min(): Smallest value in array
+sma(): Signal magnitude area
+energy(): Energy measure. Sum of the squares divided by the number of values. 
+iqr(): Interquartile range 
+entropy(): Signal entropy
+arCoeff(): Autorregresion coefficients with Burg order equal to 4
+correlation(): correlation coefficient between two signals
+maxInds(): index of the frequency component with largest magnitude
+meanFreq(): Weighted average of the frequency components to obtain a mean frequency
+skewness(): skewness of the frequency domain signal 
+kurtosis(): kurtosis of the frequency domain signal 
+bandsEnergy(): Energy of a frequency interval within the 64 bins of the FFT of each window.
+angle(): Angle between to vectors.
+
+
+may be easier to grab what is desired...for the final dataset.
+
+acclerometer  3-axial raw  - tAcc-XYZ    separated into component signals
+tbodyAcc-xyz and tGravityAcc-xyz
+gyroscopic 3-axial raw       -tGyro-XYZ
+
+
+
+accel<-grep("tAcc*
