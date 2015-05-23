@@ -1,11 +1,14 @@
 Readme information:
+Codebook information:
 
 
-PC Setup:
+STUDY DESIGN:
+
+PC Setup: 
 OS:  Windows 7 Enterprise
 CPU:  AMD FX-6300 Six core processor
 RAM:  16GB
-GPU:  GeForce GTS450 
+GPU:  GeForce GTS450
 Disk:  4TB
 
 Analysis Software:
@@ -23,7 +26,7 @@ The experiments have been carried out with a group of 30 volunteers within an ag
 
 The sensor signals (accelerometer and gyroscope) were pre-processed by applying noise filters and then sampled in fixed-width sliding windows of 2.56 sec and 50% overlap (128 readings/window). The sensor acceleration signal, which has gravitational and body motion components, was separated using a Butterworth low-pass filter into body acceleration and gravity. The gravitational force is assumed to have only low frequency components, therefore a filter with 0.3 Hz cutoff frequency was used. From each window, a vector of features was obtained by calculating variables from the time and frequency domain.
 
-Check the README.txt file for further details about this dataset.
+Check the README.txt (data file is with the raw data) file for further details about this dataset.
 
 Information acquisition:
 Data was downloaded via Mozilla as a zip file.  Drag and drop to the directory.
@@ -42,6 +45,8 @@ Dataset locations to load:
 " UCI HAR Dataset/train/Y_train.txt "
 
 
+CODE BOOK:
+
 Dataset Information:
 I used the labels provided with the data sets for the columnar labels;
 File:  features.txt 
@@ -51,7 +56,7 @@ I used the labels provided with the dataset for the row labels but placed them i
 For the new tidy dataset, the same labels were used for the columnar labels
 The activity labels were converted from the numbers (again) to text and modified to 
 
-Row Labels:
+Tidy Dataset Row Labels:
 1.	Walking_mean:  The average of all the columnar data feature labeled “Walking”
 2.	Walking_sd:  The sd of all the columnar data feature labeled “Walking”
 3.	Walking_up_mean:  The average of the walking upstairs data
@@ -75,7 +80,7 @@ There are several code samples used in the “run-analysis.R” routine.
 4.	Codetest_train.R:  Used to help generate the row and columnar data labels.
 5.	Run_analysis.R: The final code that implements the above files.
 
-Output data:
-Train_and_test.csv:  the original datasets combined
-Tidy.txt:  The tidy dataset for the project
 
+Output data:
+Tidy.txt:  The tidy dataset for the project
+  
